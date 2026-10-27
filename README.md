@@ -15,7 +15,7 @@
 3. **Commit changes**.
 4. Откройте **Settings → Pages**: Source = *Deploy from a branch*, Branch = *main*, Folder = */ (root)*, Save.
 5. Через 1–2 минуты приложение откроется по адресу
-   `https://<ваш-логин>.github.io/darts-liga/`
+   `https://contentmaker29.github.io/darts29/`
 
 ## Установка как приложения
 
