@@ -1,5 +1,5 @@
 /* Дартс Лига — офлайн-кеш */
-const CACHE = 'darts-liga-v1';
+const CACHE = 'darts-liga-v2';
 const ASSETS = [
   './',
   './index.html',
@@ -24,16 +24,25 @@ self.addEventListener('activate', (e) => {
   );
 });
 
+// страницу берём из сети (чтобы обновления прилетали), остальное — из кеша
 self.addEventListener('fetch', (e) => {
   if (e.request.method !== 'GET') return;
-  e.respondWith(
-    caches.match(e.request).then((hit) => {
-      if (hit) return hit;
-      return fetch(e.request).then((resp) => {
+  const isPage = e.request.mode === 'navigate' || e.request.destination === 'document';
+  if (isPage) {
+    e.respondWith(
+      fetch(e.request).then((resp) => {
         const copy = resp.clone();
         caches.open(CACHE).then((c) => c.put(e.request, copy)).catch(() => {});
         return resp;
-      }).catch(() => caches.match('./index.html'));
-    })
+      }).catch(() => caches.match(e.request).then((hit) => hit || caches.match('./index.html')))
+    );
+    return;
+  }
+  e.respondWith(
+    caches.match(e.request).then((hit) => hit || fetch(e.request).then((resp) => {
+      const copy = resp.clone();
+      caches.open(CACHE).then((c) => c.put(e.request, copy)).catch(() => {});
+      return resp;
+    }).catch(() => caches.match('./index.html')))
   );
 });
