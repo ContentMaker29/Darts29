@@ -1,5 +1,5 @@
 /* Дартс Лига — офлайн-кеш */
-const CACHE = 'darts-liga-v2';
+const CACHE = 'darts-liga-v3';
 const ASSETS = [
   './',
   './index.html',
